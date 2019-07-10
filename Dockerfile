@@ -9,7 +9,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8.0
 ENV GRAALVM_HOME /opt/graalvm-ce
 ENV PATH $PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
 
-RUN yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel libxcrypt-compat gcc zlib-devel && yum clean all
+RUN yum update -y && yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel libxcrypt-compat gcc zlib-devel && yum clean all
 RUN mkdir -p /opt/maven && curl -fsSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzf - --strip-components=1 -C /opt/maven
 RUN mkdir -p /opt/graalvm-ce && curl -fsSL https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-linux-amd64-$GRAALVM_VERSION.tar.gz | tar -xzf - --strip-components=1 -C /opt/graalvm-ce && /opt/graalvm-ce/bin/gu install native-image
 
