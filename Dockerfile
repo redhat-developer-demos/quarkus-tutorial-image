@@ -5,13 +5,13 @@ ARG JQ_VERSION=1.6
 ARG STERN_VERSION=1.10.0
 ARG KUBECTL_VERSION=1.15.0
 ARG OC_VERSION=4.1.4
-ARG GRAALVM_VERSION=19.1.0
+ARG GRAALVM_VERSION=19.0.2
 ARG MAVEN_VERSION=3.6.1
-ARG QUARKUS_VERSION=0.19.0
-ARG YUM_DEPENDENCIES="java-1.8.0-openjdk java-1.8.0-openjdk-devel libxcrypt-compat gcc zlib-devel openssl-devel git httpie buildah podman"
+ARG QUARKUS_VERSION=0.19.1
+ARG YUM_DEPENDENCIES="libxcrypt-compat gcc zlib-devel openssl-devel git httpie buildah podman"
 
 ENV MAVEN_HOME=/opt/maven
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0
+ENV JAVA_HOME /opt/graalvm-ce
 ENV GRAALVM_HOME /opt/graalvm-ce
 ENV PATH $PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
 
@@ -31,7 +31,7 @@ RUN mkdir -p /opt/maven && curl -fsSL https://archive.apache.org/dist/maven/mave
 
 RUN mkdir -p /opt/graalvm-ce && curl -fsSL https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-linux-amd64-$GRAALVM_VERSION.tar.gz | tar -xzf - --strip-components=1 -C /opt/graalvm-ce && /opt/graalvm-ce/bin/gu install native-image
 
-WORKDIR /root
+WORKDIR /tmp
 
 RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -Dextensions=resteasy-jsonb,panache,mariadb,swagger-ui,openapi,reactive-messaging-kafka,reactive-messaging-amqp,kafka-client,kafka-streams,vertx,reactive-streams-operators,health,metrics,opentracing,camel-core -B && cd my-quarkus-project && mvn -q clean package && cd .. && rm -fR my-quarkus-project
 
@@ -41,6 +41,6 @@ RUN rm -f /root/anaconda-ks.cfg
 
 EXPOSE 8080
 
-ADD docker-entrypoint.sh /usr/local/bin/
+ADD docker-entrypoint.sh /
 
-ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
