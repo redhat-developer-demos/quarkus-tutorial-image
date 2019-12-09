@@ -36,7 +36,7 @@ WORKDIR /tmp
 
 RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -Dextensions=$QUARKUS_EXTENSIONS -B && cd my-quarkus-project && mvn -q clean package && cd .. && rm -fR my-quarkus-project
 
-RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -B && cd my-quarkus-project && mvn -q package -Pnative && cd .. && rm -fR my-quarkus-project
+RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -B && cd my-quarkus-project && mvn -q package -Pnative -DskipTests && cd .. && rm -fR my-quarkus-project
 
 RUN rm -f /root/anaconda-ks.cfg
 
