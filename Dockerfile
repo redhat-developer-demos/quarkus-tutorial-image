@@ -9,6 +9,7 @@ ARG GRAALVM_VERSION=19.2.1
 ARG MAVEN_VERSION=3.6.1
 ARG QUARKUS_VERSION=1.0.1.Final
 ARG YUM_DEPENDENCIES="libxcrypt-compat gcc zlib-devel openssl-devel git httpie buildah podman"
+ARG QUARKUS_EXTENSIONS="resteasy-jsonb,hibernate-orm-panache,mariadb,swagger-ui,openapi,reactive-messaging-kafka,reactive-messaging-amqp,kafka-client,kafka-streams,vertx,reactive-streams-operators,health,metrics,smallrye-opentracing,camel-quarkus-core"
 
 ENV MAVEN_HOME=/opt/maven
 ENV JAVA_HOME /opt/graalvm-ce
@@ -33,7 +34,7 @@ RUN mkdir -p /opt/graalvm-ce && curl -fsSL https://github.com/oracle/graal/relea
 
 WORKDIR /tmp
 
-RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -Dextensions=resteasy-jsonb,panache,mariadb,swagger-ui,openapi,reactive-messaging-kafka,reactive-messaging-amqp,kafka-client,kafka-streams,vertx,reactive-streams-operators,health,metrics,opentracing,camel-core -B && cd my-quarkus-project && mvn -q clean package && cd .. && rm -fR my-quarkus-project
+RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -Dextensions=$QUARKUS_EXTENSIONS -B && cd my-quarkus-project && mvn -q clean package && cd .. && rm -fR my-quarkus-project
 
 RUN mvn -q io.quarkus:quarkus-maven-plugin:$QUARKUS_VERSION:create -DclassName=com.redhat.developers.HelloResource -B && cd my-quarkus-project && mvn -q package -Pnative && cd .. && rm -fR my-quarkus-project
 
