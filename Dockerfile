@@ -4,7 +4,7 @@ ARG YQ_VERSION=2.4.0
 ARG JQ_VERSION=1.6
 ARG STERN_VERSION=1.10.0
 ARG KUBECTL_VERSION=1.15.0
-ARG OC_VERSION=4.1.4
+ARG OC_VERSION=4.2.9
 ARG GRAALVM_VERSION=19.2.1
 ARG MAVEN_VERSION=3.6.1
 ARG QUARKUS_VERSION=1.0.1.Final
@@ -25,7 +25,7 @@ RUN curl -fsSL https://github.com/wercker/stern/releases/download/${STERN_VERSIO
 
 RUN curl -fsSL https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl && chmod ugo+x /usr/local/bin/kubectl
 
-RUN curl -fsSL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-${OC_VERSION}.tar.gz | tar xzf - -C /usr/local/bin oc && chmod ugo+x /usr/local/bin/oc
+RUN curl -fsSL https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz | tar xzf - -C /usr/local/bin oc && chmod ugo+x /usr/local/bin/oc
 
 RUN mkdir -p /opt/maven && curl -fsSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzf - --strip-components=1 -C /opt/maven
 
